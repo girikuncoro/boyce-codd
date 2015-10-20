@@ -19,12 +19,21 @@ public class AttributeSet {
 	public AttributeSet(AttributeSet other) {
 		_attributes = new ArrayList<>(other._attributes);
 	}
+	
+	//constructor for getting powerset
+	public AttributeSet(List<Attribute> other) {
+		_attributes = other;
+	}
 
 	public void addAttribute(Attribute a) {
 		if(!_attributes.contains(a))
 			_attributes.add(a);
 	}
 
+	public void addAllAttribute(AttributeSet other) {
+		_attributes.addAll(other.getAttributes());
+	}
+	
 	public boolean contains(Attribute a) {
 		return _attributes.contains(a);
 	}

@@ -18,6 +18,8 @@ public class BCNFTest {
     attrs.addAttribute(new Attribute("a"));
     attrs.addAttribute(new Attribute("b"));
     attrs.addAttribute(new Attribute("c"));
+    
+    System.out.println(attrs);
 
     //create functional dependencies
     Set<FunctionalDependency> fds = new HashSet<FunctionalDependency>();
