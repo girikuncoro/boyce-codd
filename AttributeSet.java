@@ -38,7 +38,14 @@ public class AttributeSet {
 			return false;
 		}
 		//TODO: you should probably implement this
-		return this == other;
+		AttributeSet otherSet = (AttributeSet)other;
+		boolean result = getAttributes().containsAll(otherSet.getAttributes()) &&
+						 otherSet.getAttributes().containsAll(getAttributes());
+		return result;
+	}
+	
+	public List<Attribute> getAttributes() {
+		return _attributes;
 	}
 
 	public Iterator<Attribute> iterator() {
