@@ -12,15 +12,48 @@ public class BCNF {
                                             Set<FunctionalDependency> functionalDependencies) {
 	  Set<AttributeSet> result = new HashSet<AttributeSet>();
 	  
-	  // Pick subset set of attributes X from the relation
+	  // Pick subset set of attributes X from the relation, using powerset
 	  Set<AttributeSet> powerSet = getPowerset(attributeSet);
 	  
-	  
-	  // Find X+ (closure)
-	  
-	  
-	  
-	  return Collections.emptySet();
+	  for(AttributeSet x : powerSet) {
+		  // Find X+ (closure)
+		  AttributeSet xClosure = closure(x, functionalDependencies);
+		  
+		  // Consider the case where set of functional dependencies includes attributes not in the relation
+		  AttributeSet tmpClosure = new AttributeSet(); 
+		  
+		  for(Attribute attr : xClosure.getAttributes()) {
+			  if(attributeSet.contains(attr)) {
+				  tmpClosure.addAttribute(attr);
+			  }
+		  }
+		  xClosure = tmpClosure;
+		  
+		  // If X is super key or determines only itself, try different set of attributes
+		  if(xClosure.equals(x) || xClosure.equals(attributeSet)) {
+			  continue;
+		  }
+		  
+		  // Separate table into two tables: X+ and (X U (X+)^c)
+		  ArrayList<Attribute> xComplement = new ArrayList<Attribute>(x.getAttributes());
+		  
+		  for(Attribute attr : attributeSet.getAttributes()) {
+			  if(!xClosure.contains(attr)) {
+				  xComplement.add(attr);
+			  }
+		  }
+		  AttributeSet xClosureComplement = new AttributeSet(xComplement);
+		  
+		  // Separate two tables and recurse on each side
+		  result.addAll(decompose(xClosure, functionalDependencies));
+		  result.addAll(decompose(xClosureComplement, functionalDependencies));
+
+		  // Done if all attribute sets have been tried
+		  return result;
+	  }
+	  // In case no separation, return same attributeSet
+	  result.add(attributeSet);
+	  return result;
   }
 
   /**
