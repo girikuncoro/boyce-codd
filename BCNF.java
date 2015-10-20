@@ -4,14 +4,30 @@ public class BCNF {
 
   /**
    * Implement your algorithm here
+   * @param attributeSet
+   * @param functionalDependencies
+   * @return set of attribute set
    **/
   public static Set<AttributeSet> decompose(AttributeSet attributeSet,
                                             Set<FunctionalDependency> functionalDependencies) {
-    return Collections.emptySet();
+	  Set<AttributeSet> result = new HashSet<AttributeSet>();
+	  
+	  // Pick subset set of attributes X from the relation
+	  Set<AttributeSet> powerSet = getPowerset(attributeSet);
+	  
+	  
+	  // Find X+ (closure)
+	  
+	  
+	  
+	  return Collections.emptySet();
   }
 
   /**
    * Recommended helper method
+   * @param attributeSet
+   * @param functionalDependencies
+   * @return newDependency (new attribute set of dependency)
    **/
   public static AttributeSet closure(AttributeSet attributeSet, Set<FunctionalDependency> functionalDependencies) {
 	  // Data structure to store count[w->z] := |w|
@@ -64,8 +80,8 @@ public class BCNF {
 						  }
 					  }
 					  
-					  // newDep := newDep V add
-					  // update := update V add
+					  // newDep := newDep UNION add
+					  // update := update UNION add
 					  for(Attribute a : add.getAttributes()) {
 						  newDep.addAttribute(a);
 						  update.addAttribute(a);
@@ -77,4 +93,34 @@ public class BCNF {
 	  
 	  return newDep;
   }
+  
+  /**
+   * Helper function to get powerset of the given attributeSet
+   * e.g. powerset of {1,2,3} is {{},{2},{3},{2,3},{1,2},{1,3},{1,2,3},{1}}
+   * @param attributeSet
+   * @return powerSet
+   */
+  public static Set<AttributeSet> getPowerset(AttributeSet attributeSet) {
+	  Set<AttributeSet> sets = new HashSet<AttributeSet>();
+	  
+	  if(attributeSet.size() == 0) {
+		  sets.add(new AttributeSet(attributeSet));
+		  return sets;
+	  }
+	  
+	  List<Attribute> list = new ArrayList<Attribute>(attributeSet.getAttributes());
+	  Attribute head = list.get(0);
+	  AttributeSet rest = new AttributeSet(list.subList(1, list.size()));
+	  
+	  for(AttributeSet set : getPowerset(rest)) {
+		  AttributeSet newSet = new AttributeSet();
+		  newSet.addAttribute(head);
+		  newSet.addAllAttribute(set);
+		  sets.add(newSet);
+		  sets.add(set);
+	  }
+
+	  return sets;
+  }
+  
 }
