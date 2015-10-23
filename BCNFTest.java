@@ -98,7 +98,6 @@ public class BCNFTest {
 		ind.addAttribute(new Attribute("b"));
 		dep.addAttribute(new Attribute("f"));
 
-
 		FunctionalDependency fd = new FunctionalDependency(ind, dep);
 		fds.add(fd);
 
@@ -348,7 +347,6 @@ public class BCNFTest {
 		fd = new FunctionalDependency(ind, dep);
 		fds.add(fd);
 
-
 		// run client code
 		Set<AttributeSet> bcnf = BCNF.decompose(attrs, fds);
 
@@ -389,7 +387,6 @@ public class BCNFTest {
 		dep.addAttribute(new Attribute("c"));
 		dep.addAttribute(new Attribute("d"));
 		dep.addAttribute(new Attribute("e"));
-
 
 		FunctionalDependency fd = new FunctionalDependency(ind, dep);
 		fds.add(fd);
