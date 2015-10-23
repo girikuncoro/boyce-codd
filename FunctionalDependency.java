@@ -24,15 +24,15 @@ public class FunctionalDependency {
 	public AttributeSet dependent() {
 		return new AttributeSet(_dependentAttributeSet);
 	}
-	
+
 	public AttributeSet getIndependent() {
 		return _independentAttributeSet;
 	}
-	
+
 	public AttributeSet getDependent() {
 		return _dependentAttributeSet;
 	}
-	
+
 	public String toString() {
 		String result = "";
 		Iterator<Attribute> indIterator = _independentAttributeSet.iterator();
@@ -42,7 +42,7 @@ public class FunctionalDependency {
 			result += indIterator.next();
 		}
 		
-		result += "->";
+		result += ".";
 		
 		while(depIterator.hasNext()) {
 			result += depIterator.next();

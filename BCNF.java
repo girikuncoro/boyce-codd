@@ -10,6 +10,7 @@ public class BCNF {
 	 **/
 	public static Set<AttributeSet> decompose(AttributeSet attributeSet,
 			Set<FunctionalDependency> functionalDependencies) {
+
 		Set<AttributeSet> result = new HashSet<AttributeSet>();
 
 		// Pick subset set of attributes X from the relation, using powerset
@@ -23,24 +24,18 @@ public class BCNF {
 			AttributeSet tmpClosure = new AttributeSet(); 
 
 			for(Attribute attr : xClosure.getAttributes()) {
-				if(attributeSet.contains(attr)) {
-					tmpClosure.addAttribute(attr);
-				}
+				if(attributeSet.contains(attr)) tmpClosure.addAttribute(attr);
 			}
 			xClosure = tmpClosure;
 
 			// If X is super key or determines only itself, try different set of attributes
-			if(xClosure.equals(x) || xClosure.equals(attributeSet)) {
-				continue;
-			}
+			if(xClosure.equals(x) || xClosure.equals(attributeSet)) continue;
 
 			// Separate table into two tables: X+ and (X U (X+)^c)
 			ArrayList<Attribute> xComplement = new ArrayList<Attribute>(x.getAttributes());
 
 			for(Attribute attr : attributeSet.getAttributes()) {
-				if(!xClosure.contains(attr)) {
-					xComplement.add(attr);
-				}
+				if(!xClosure.contains(attr)) xComplement.add(attr);
 			}
 			AttributeSet xClosureComplement = new AttributeSet(xComplement);
 
@@ -49,13 +44,11 @@ public class BCNF {
 			result.addAll(decompose(xClosureComplement, functionalDependencies));
 
 			// Done if all attribute sets have been tried
-			result = cleanSet(result);
-			return result;
+			return clean(result);
 		}
 		// In case no separation, return same attributeSet
 		result.add(attributeSet);
-		result = cleanSet(result);
-		return result;
+		return clean(result);
 	}
 
 	/**
@@ -110,9 +103,7 @@ public class BCNF {
 
 						// add := Z - newDep
 						for(Attribute a : dep.getAttributes()) {
-							if(!newDep.contains(a)) {
-								add.addAttribute(a);
-							}
+							if(!newDep.contains(a)) add.addAttribute(a);
 						}
 
 						// newDep := newDep UNION add
@@ -125,7 +116,6 @@ public class BCNF {
 				}
 			}
 		}
-
 		return newDep;
 	}
 
@@ -159,7 +149,6 @@ public class BCNF {
 			sets.add(newSet);
 			sets.add(set);
 		}
-
 		return sets;
 	}
 
@@ -168,18 +157,15 @@ public class BCNF {
 	 * @param newAttrs
 	 * @return cleanedAttrs
 	 */
-	public static Set<AttributeSet> cleanSet(Set<AttributeSet> newAttrs) {
+	public static Set<AttributeSet> clean(Set<AttributeSet> newAttrs) {
 		Set<AttributeSet> cleanedAttrs = new HashSet<AttributeSet>();
 		for(AttributeSet attrs : newAttrs) {
 			AttributeSet tmpAttrs = new AttributeSet();
 			for(Attribute attr : attrs.getAttributes()) {
-				if(! attr.toString().isEmpty()) {
-					tmpAttrs.addAttribute(attr);
-				}
+				if(!attr.toString().isEmpty()) tmpAttrs.addAttribute(attr);
 			}
 			cleanedAttrs.add(tmpAttrs);
 		}
 		return cleanedAttrs;
 	}
-
 }
